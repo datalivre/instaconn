@@ -60,7 +60,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Robo de automação")
     parser.add_argument('-f', action='store', dest='file',
-                        default='instaconn.properties', required=False,
+                        default='files/instaconn.properties', required=False,
                         help='arquivo de propriedades')
     arguments = parser.parse_args()
     args_file = get_args(arguments.file)
