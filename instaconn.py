@@ -19,10 +19,9 @@ from packs.get_args import get_args
 
 class InstaConn:
 
-    def __init__(self, username, password, location_url, driver):
+    def __init__(self, username, password, driver):
         self.username = username
         self.password = password
-        self.location_url = location_url
         self.driver = driver
 
     def login(self):
@@ -30,12 +29,10 @@ class InstaConn:
             WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located((By.NAME, 'username')))
         finally:
-            username_field = self.driver.find_element_by_name('username')
-            password_field = self.driver.find_element_by_name('password')
-            username_field.clear()
-            password_field.clear()
-            actions = ActionChains(self.driver).click(username_field).send_keys(
-                self.username).click(password_field).send_keys(self.password).send_keys(Keys.RETURN)
+            user_pass_list = [self.driver.find_element_by_name(field) for field in [
+                'username', 'password']]
+            actions = ActionChains(self.driver).click(user_pass_list[0]).send_keys(
+                self.username).click(user_pass_list[1]).send_keys(self.password).send_keys(Keys.RETURN)
             actions.perform()
         try:
             WebDriverWait(self.driver, 10).until(
@@ -68,13 +65,12 @@ if __name__ == "__main__":
     driver.get(args_file['login_ig'])
     try:
         instaconn = InstaConn(
-            args_file['username'], args_file['password'],
-            args_file['location_url'], driver)
+            args_file['username'], args_file['password'], driver)
         instaconn.login()
         instaconn.home()
         input("Pressione uma tecla para sair.")
     except KeyboardInterrupt:
-        print('Bye')
         exit(errno.EPERM)
     finally:
+        print('Bye')
         instaconn.quit_browser()
