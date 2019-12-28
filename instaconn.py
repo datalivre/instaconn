@@ -62,7 +62,7 @@ if __name__ == "__main__":
     arguments = parser.parse_args()
     args_file = get_args(arguments.file)
     driver = webdriver.Chrome(executable_path=args_file['chromedriver_path'])
-    driver.get(args_file['login_ig'])
+    driver.get(args_file['login_url'])
     try:
         instaconn = InstaConn(
             args_file['username'], args_file['password'], driver)
