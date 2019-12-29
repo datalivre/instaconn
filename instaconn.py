@@ -61,16 +61,17 @@ if __name__ == "__main__":
                         help='arquivo de propriedades')
     arguments = parser.parse_args()
     args_file = get_args(arguments.file)
-    driver = webdriver.Chrome(executable_path=args_file['chromedriver_path'])
-    driver.get(args_file['login_url'])
     try:
-        instaconn = InstaConn(
-            args_file['username'], args_file['password'], driver)
-        instaconn.login()
-        instaconn.home()
-        input("Pressione uma tecla para sair.")
+        with webdriver.Chrome(args_file['chromedriver_path']) as driver:
+            driver.get(args_file['login_url'])
+            instaconn = InstaConn(
+                args_file['username'], args_file['password'], driver)
+            instaconn.login()
+            instaconn.home()
+            input("Pressione uma tecla para sair.")
     except KeyboardInterrupt:
         exit(errno.EPERM)
     finally:
         print('Bye')
-        instaconn.quit_browser()
+        if instaconn:
+            instaconn.quit_browser()
